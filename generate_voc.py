@@ -59,6 +59,7 @@ while file_not_end:
     file_depth.text = str(im_ch)
 
     for item in items:
+        item = item.split(',')
 
         #create a car obj
         obj = ET.SubElement(out,'object')
@@ -81,7 +82,7 @@ while file_not_end:
 
     out_tree = ET.ElementTree(out)
 
-    out_xml_path = "Annotations/"
+    out_xml_path = "VOC2007/Annotations/"
     xml_file_name = jpg_name[:-4]
     out_tree.write(out_xml_path + xml_file_name + ".xml")
 
