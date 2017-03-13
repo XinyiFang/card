@@ -19,16 +19,21 @@ while True:
 
     jpg_name,others=json_file.readline().split(':')
     jpg_name=jpg_name[2:-1]
-    stack=items=[]
+    stack=[]
+    items=[]
     for i in range(len(others)-3):
         t=others[i]
         if t=="[":
-            stack.append(t,i)
+            stack.append((t,i))
         elif t=="]" and stack!=[]:
             tt=stack[-1]
             if tt[0]=="[":
                 stack.pop()
-                items.append(others[tt[1]+1,i])
+                items.append(others[tt[1]+1:i])
+
+    print jpg_name
+    for item in items:
+        print item
 
     #create a xml
     out = ET.Element('annotation')
@@ -53,35 +58,26 @@ while True:
         #create a car obj
         obj = ET.SubElement(out,'object')
         obj_name = ET.SubElement(obj,"name")
-        obj_name.text = "car"
-
-        obj_pose = ET.SubElement(obj,"pose")
-        obj_pose.text = "Unspecified"
-
-        obj_truncated = ET.SubElement(obj,"truncated")
-        obj_truncated.text = "1"
-
-        obj_difficult = ET.SubElement(obj,"difficult")
-        obj_difficult.text = "0"
+        obj_name.text = str(item[4])
 
         #create boundingbox
         bndbox = ET.SubElement(obj,"bndbox")
         xmin = ET.SubElement(bndbox,'xmin')
-        xmin.text = str(items[0])
+        xmin.text = str(item[0])
 
         ymin = ET.SubElement(bndbox,'ymin')
-        ymin.text = str(items[1])
+        ymin.text = str(item[1])
 
         xmax = ET.SubElement(bndbox,'xmax')
-        xmax.text = str(items[2])
+        xmax.text = str(item[2])
 
         ymax = ET.SubElement(bndbox,'ymax')
-        ymax.text = str(items[3])
+        ymax.text = str(item[3])
 
     out_tree = ET.ElementTree(out)
 
     out_xml_path = "Annotations/"
     xml_file_name = jpg_name
-    out_tree.write(out_xml_path + xml_file_name + ".xml")
+    #out_tree.write(out_xml_path + xml_file_name + ".xml")
 
-print "Process done"
+
