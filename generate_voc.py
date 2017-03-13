@@ -9,15 +9,19 @@ import os
 
 
 json_file = open("to62090.txt",'r')
-
-
-while True:
+file_not_end=True
+while file_not_end:
 
     im_height = 640
     im_width = 360
     im_ch = 3
 
-    jpg_name,others=json_file.readline().split(':')
+    line=json_file.readline()
+    if not line:
+        file_not_end=False
+        continue
+    line=line.split(':')
+    jpg_name,others=line[0],line[1]
     jpg_name=jpg_name[2:-1]
     stack=[]
     items=[]
@@ -34,6 +38,7 @@ while True:
     print jpg_name
     for item in items:
         print item
+
 
     #create a xml
     out = ET.Element('annotation')
@@ -77,7 +82,7 @@ while True:
     out_tree = ET.ElementTree(out)
 
     out_xml_path = "Annotations/"
-    xml_file_name = jpg_name
-    #out_tree.write(out_xml_path + xml_file_name + ".xml")
+    xml_file_name = jpg_name[:-4]
+    out_tree.write(out_xml_path + xml_file_name + ".xml")
 
 
