@@ -84,4 +84,4 @@ while True:
     xml_file_name = jpg_name
     out_tree.write(out_xml_path + xml_file_name + ".xml")
 
-print "Process dne"
+print "Process done"
